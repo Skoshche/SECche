@@ -1,0 +1,28 @@
+
+RevenueFromContractWithCustomerExcludingAssessedTax,Revenue
+Revenues,Revenue
+SalesRevenueNet,Revenue
+CostOfGoodsAndServicesSold,COGS/COR
+CostOfRevenue,COGS/COR
+GrossProfit,Gross Profit
+OperatingExpenses,Operating Expenses
+AdvertisingExpense,Advertising Expenses
+MarketingExpense,Marketing Expenses
+CostOfGoodsAndServicesSoldDepreciation,COGS Depreciation
+DepreciationAndAmortization,Depreciation and Amortization
+DepreciationDepletionAndAmortization,Depreciation and Amortization
+InterestExpense,Interest Expense
+NetIncomeLoss,Net Income
+OperatingIncomeLoss,Opering Income
+NonoperatingIncomeExpense,Nonoperating Income
+EarningsPerShareBasic,EPS
+Assets,Assets
+AccruedLiabilitiesCurrent,Current Liabilities
+LiabilitiesCurrent,Liabilities
+AccountsPayableCurrent,Accounts Payable
+AccountsPayableTradeCurrent,Accounts Payable
+AccountsReceivableNetCurrent,Accounts Receivable
+Liabilities,Liabilities
+StockholdersEquity,Common Stock Equity
+LiabilitiesAndStockholdersEquity,Liabilities + Common Stock Equity
+Cash,Cash
