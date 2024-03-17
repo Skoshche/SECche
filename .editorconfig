@@ -1,0 +1,21 @@
+# SECche || .editorconfig
+# --------------------------------
+# Unified code styling and formatting among different editors and IDEs
+#
+# Authors: @MaxineToTheStars <https://github.com/MaxineToTheStars>
+# ----------------------------------------------------------------
+
+# Root configuration file
+root = true
+
+# Applies to *ALL* files
+[*]
+charset = utf-8                   # UTF-8 Character set
+end_of_line = lf                  # Unix like "line-feed" EOLs
+insert_final_newline = true       # Add a final new line after saving
+trim_trailing_whitespace = true   # Remove unneeded whitespace
+
+# Applies to *.py files
+[*.{py}]
+indent_size = 4                   # Four space indentation
+indent_style = space              # Use spaces
