@@ -67,8 +67,8 @@ class Secche:
     # Interfaces
 
     # Constants
+    _API_QUERY_URL: Final[str] = "https://data.sec.gov/api/xbrl/companyfacts/CIK{centralIndexKey}.json"
     _VERSION_NUMBER: Final[str] = "beta-v1.0.0"
-    _API_QUERY_URL_: Final[str] = "https://data.sec.gov/api/xbrl/companyfacts/CIK{centralIndexKey}.json"
     _OUTPUT_FILENAME: Final[str] = "{ticker}_financial_data.xlsx"
     _API_QUERY_HEADERS: Final[dict] = {"User-Agent": "SECche"}
     _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/centralIndexKey.csv")
@@ -139,7 +139,7 @@ class Secche:
 
         # Send the request
         apiResponse: Final[Response] = get(
-            self._API_QUERY_URL_.format(centralIndexKey=centralIndexKey),
+            self._API_QUERY_URL.format(centralIndexKey=centralIndexKey),
             headers=self._API_QUERY_HEADERS,
         )
 
@@ -222,43 +222,37 @@ class Secche:
             endDate: Final[str] = data["end"]
             endYear: Final[int] = endDate[0:4]
 
-            # TODO: This is very fucked
-
             # Create a new entry if specified year is not yet a key
             if endYear not in self._outputData.keys():
                 self._outputData[endYear] = {}
 
-            if self._financialMetricOptions[metricOption] not in self._outputData[endYear].keys():
-                self._outputData[endYear][self._financialMetricOptions[metricOption]] = []
-
             # Populate
-            self._outputData[endYear][self._financialMetricOptions[metricOption]].append(data["val"])
+            self._outputData[endYear][self._financialMetricOptions[metricOption]] = data["val"]
 
     def _createAndStoreFromData(self, ticker: str) -> None:
         # Create a new data frame
         dataFrame: Final[DataFrame] = DataFrame().from_dict(
             orient="index",
             data=self._outputData,
-            columns=self._outputData.keys(),
         )
 
-        # Instance the data
-        dataFrame.transpose()
+        # Flip the row and columns
+        dataFrame = dataFrame.transpose()
 
         # Re-index the data frame
-        dataFrame = dataFrame.reindex(sorted(dataFrame.columns, reverse=True))
+        dataFrame = dataFrame.reindex(columns=sorted(dataFrame.columns, reverse=True))
 
         # Create a new spreadsheet writer
         spreadSheetWriter = ExcelWriter(
-            self._OUTPUT_FILENAME.format(ticker=ticker),
             engine="xlsxwriter",
+            path=self._OUTPUT_FILENAME.format(ticker=ticker),
         )
 
         # Convert the data frame to an excel sheet
         dataFrame.to_excel(
-            spreadSheetWriter,
             index=True,
             sheet_name="generated-report",
+            excel_writer=spreadSheetWriter,
         )
 
         # Set the zoom level
@@ -279,4 +273,5 @@ class Secche:
 
 # Run
 if __name__ == "__main__":
+    # Test case
     Secche().query("aapl")
