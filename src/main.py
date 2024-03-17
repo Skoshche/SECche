@@ -14,8 +14,8 @@ from pandas import read_csv, DataFrame, ExcelWriter
 # File Docstring
 # --------------------------------
 #
-# Authors: @Skoshche <https:#github.com/Skoshche>                  || Owner
-#          @MaxineToTheStars <https:#github.com/MaxineToTheStars>  || Contributor
+# Authors: @Skoshche <https:www.github.com/Skoshche>                  || Owner
+#          @MaxineToTheStars <https:www.github.com/MaxineToTheStars>  || Contributor
 # ----------------------------------------------------------------
 
 
