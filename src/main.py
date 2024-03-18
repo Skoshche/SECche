@@ -178,6 +178,8 @@ class Secche:
     # Private Static Methods
 
     # Private Inherited Methods
+            
+    #Pad out the CIK to be 10 digits
     def _padCIK(self, centralIndexKey: str) -> str:
         """
         Returns a padded CIK that matches the 10 digit standard.
@@ -189,6 +191,7 @@ class Secche:
         # Welcome to funky town
         return ((10 - len(centralIndexKey)) * "0") + centralIndexKey
 
+    #Obtain the CIK value from centralIndexKey.csv (to be updated)
     def _getCIK(self, ticker: str) -> str:
         """
         Retrieves a CIK from the given ticker.
@@ -205,6 +208,7 @@ class Secche:
             # CIK was not found for the ticker, return None
             return None
 
+    #Parse financial data from SEC api
     def _parseAndStoreFinancialData(self, metricOption: str, rawJSONData: dict, book) -> None:
         """
         Parses the return JSON data and stores the specified financial metric option.
@@ -259,6 +263,52 @@ class Secche:
             # Populate the grid
             self._outputData[book][endYear][self._financialMetricOptions[book][metricOption]] = data["val"]
 
+    #Format for excel
+    def _ExcelFormatting(self, ticker) -> None:
+        row = 0
+
+        spreadSheetWriter = ExcelWriter(
+            engine="xlsxwriter",
+            path=self._OUTPUT_FILENAME.format(ticker=ticker.upper()),
+        )
+
+        # Add number format
+        numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
+        bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
+
+        for i in (dict.keys(self._financialMetricOptions)):
+            variable_name = "_" + i.replace(" ", "")
+            variable = getattr(self, variable_name)
+            try:
+                variable.to_excel(
+                        index=True,
+                        sheet_name="Data",
+                        excel_writer=spreadSheetWriter,
+                        startrow=row
+                    )
+                
+                spreadSheetWriter.sheets["Data"].write(row, 0, (i + ' Data provided by SECche: ' + ticker.upper()), bold)
+
+                row += (variable.shape[0] +2)
+
+            except:
+                (i, " not added")
+
+        # Set the zoom level
+        spreadSheetWriter.sheets["Data"].set_zoom(100)
+
+            # Format cells
+        
+        spreadSheetWriter.sheets["Data"].set_column(f"B:{chr(self._IncomeStatement.shape[1] + 65)}", 12, numberFormat)
+
+            # Format
+        spreadSheetWriter.sheets["Data"].autofit()
+
+        spreadSheetWriter.sheets["Data"].write(0, 0, "Income Statement" + ' Data provided by SECche: ' + ticker.upper(), bold)
+        spreadSheetWriter.close()
+        # Close the spreadsheet
+
+    #Store the data in dataframes
     def _createAndStoreFromData(self, ticker: str, book, final) -> None:
         # Create a new data frame
         dataFrame = (book.replace(" ", "") + "_dataframe")
@@ -276,10 +326,6 @@ class Secche:
 
         output = (self._OUTPUT_FILENAME, book)
         # Create a new spreadsheet writer
-        spreadSheetWriter = ExcelWriter(
-            engine="xlsxwriter",
-            path=self._OUTPUT_FILENAME.format(ticker=ticker.upper()),
-        )
 
         #Save balance sheet and income statement as two seperate dataframes
         #Can change this to be a dynamic variable
@@ -289,39 +335,19 @@ class Secche:
         elif book == "Income Statement":
             self._IncomeStatement = dataFrame
         
+        elif book == "Cash Flow":
+            self._CashFlow = dataFrame
+        
+        elif book == "Ratios":
+            self._Ratios = dataFrame
+        
 
 
-
+        startRow = 0
         # Convert the data frame to an excel sheet once all variables are set
         if final == True:
-            self._BalanceSheet.to_excel(
-                index=True,
-                sheet_name="Data",
-                excel_writer=spreadSheetWriter,
-                startrow=self._BalanceSheet.shape[0] + 5
-            )
-            self._IncomeStatement.to_excel(
-                index=True,
-                sheet_name="Data",
-                excel_writer=spreadSheetWriter,
-            )
 
-            # Set the zoom level
-            spreadSheetWriter.sheets["Data"].set_zoom(100)
-
-            # Add number format
-            numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
-            bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
-            # Format cells
-            spreadSheetWriter.sheets["Data"].set_column(f"B:{chr(self._IncomeStatement.shape[1] + 65)}", 12, numberFormat)
-
-            # Format
-            spreadSheetWriter.sheets["Data"].autofit()
-
-            spreadSheetWriter.sheets["Data"].write(0, 0, "Income Statement" + ' Data provided by SECche: ' + ticker.upper(), bold)
-            spreadSheetWriter.sheets["Data"].write(self._BalanceSheet.shape[0] + 5, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
-            spreadSheetWriter.close()
-        # Close the spreadsheet
+            self._ExcelFormatting(ticker)
 
 # Run
 if __name__ == "__main__":
