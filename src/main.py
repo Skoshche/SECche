@@ -81,8 +81,10 @@ class Secche:
     _financialMetricOptions: Final[dict] = None
     _centralIndexKeyDataFrame: Final[DataFrame] = None
     
-    _dataFrame1 = 0
-    _dataFrame2 = 0
+    _IncomeStatement: Final[any] = None
+    _BalanceSheet: Final[any]  = None
+    _CashFlow: Final[any]  = None
+    _Ratios: Final[any]  = None
 
     # Constructor
     def __init__(self) -> None:
@@ -279,24 +281,26 @@ class Secche:
             path=self._OUTPUT_FILENAME.format(ticker=ticker.upper()),
         )
 
+        #Save balance sheet and income statement as two seperate dataframes
+        #Can change this to be a dynamic variable
         if book == "Balance Sheet":
-            self._dataFrame1 = dataFrame
+            self._BalanceSheet = dataFrame
 
         elif book == "Income Statement":
-            self._dataFrame2 = dataFrame
-        #Save balance sheet and income statement as two seperate dataframes
+            self._IncomeStatement = dataFrame
+        
 
 
-        # Convert the data frame to an excel sheet
 
+        # Convert the data frame to an excel sheet once all variables are set
         if final == True:
-            self._dataFrame1.to_excel(
+            self._BalanceSheet.to_excel(
                 index=True,
                 sheet_name="Data",
                 excel_writer=spreadSheetWriter,
-                startrow=self._dataFrame1.shape[0] + 5
+                startrow=self._BalanceSheet.shape[0] + 5
             )
-            self._dataFrame2.to_excel(
+            self._IncomeStatement.to_excel(
                 index=True,
                 sheet_name="Data",
                 excel_writer=spreadSheetWriter,
@@ -309,13 +313,13 @@ class Secche:
             numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
             bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
             # Format cells
-            spreadSheetWriter.sheets["Data"].set_column(f"B:{chr(self._dataFrame2.shape[1] + 65)}", 12, numberFormat)
+            spreadSheetWriter.sheets["Data"].set_column(f"B:{chr(self._IncomeStatement.shape[1] + 65)}", 12, numberFormat)
 
             # Format
             spreadSheetWriter.sheets["Data"].autofit()
 
             spreadSheetWriter.sheets["Data"].write(0, 0, "Income Statement" + ' Data provided by SECche: ' + ticker.upper(), bold)
-            spreadSheetWriter.sheets["Data"].write(self._dataFrame1.shape[0] + 5, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
+            spreadSheetWriter.sheets["Data"].write(self._BalanceSheet.shape[0] + 5, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
             spreadSheetWriter.close()
         # Close the spreadsheet
 
