@@ -80,6 +80,9 @@ class Secche:
     _outputData: Final[dict] = None
     _financialMetricOptions: Final[dict] = None
     _centralIndexKeyDataFrame: Final[DataFrame] = None
+    
+    _dataFrame1 = 0
+    _dataFrame2 = 0
 
     # Constructor
     def __init__(self) -> None:
@@ -111,10 +114,19 @@ class Secche:
             for optionRow in fileReader:
                 # Index is a tuple
                 optionKey: Final[str] = optionRow[0].strip()
+                # SEC code
                 optionValue: Final[str] = optionRow[1].strip()
+                # Code name
+                optionSheet: Final[str] = optionRow[2].strip()
+                # What sheet its on
 
-                # Store
-                self._financialMetricOptions[optionKey] = optionValue
+                # Create 3 dictionaries, Balance Sheet, Income Statement, Cash FLow (depending on FMO.csv)
+                if optionSheet not in self._financialMetricOptions:
+                    self._financialMetricOptions[optionSheet] = {}
+                
+                #Save each key inside the dictionary it belongs to
+                self._financialMetricOptions[optionSheet][optionKey] = optionValue
+                
 
         # Debugging
         # print('Un-Padded CIK of "AAPL" ->', self._centralIndexKeyDataFrame.loc["AAPL".lower(), "CIK"])
@@ -147,12 +159,21 @@ class Secche:
         responseJSON: Final[dict] = loads(apiResponse.text)
 
         # Parse and store data
-        for metricOption in self._financialMetricOptions:
-            self._parseAndStoreFinancialData(metricOption, responseJSON)
+        #WORKING
+        #For Balance Sheet and Income Statement
+        amountBooks = len(self._financialMetricOptions)
+        timesRan = 0
+        for book in self._financialMetricOptions:
+            #For each value in Balance Sheet or Income statement
+            for metricOption in self._financialMetricOptions[book]:
+                self._parseAndStoreFinancialData(metricOption, responseJSON, book)
 
-        # Create a new spreadsheet and dump the data
-        self._createAndStoreFromData(ticker)
-
+            # Create a new spreadsheet and dump the data
+            timesRan += 1
+            final = False
+            if timesRan == amountBooks:
+                final = True
+            self._createAndStoreFromData(ticker, book, final)
     # Private Static Methods
 
     # Private Inherited Methods
@@ -183,7 +204,7 @@ class Secche:
             # CIK was not found for the ticker, return None
             return None
 
-    def _parseAndStoreFinancialData(self, metricOption: str, rawJSONData: dict) -> None:
+    def _parseAndStoreFinancialData(self, metricOption: str, rawJSONData: dict, book) -> None:
         """
         Parses the return JSON data and stores the specified financial metric option.
 
@@ -191,7 +212,6 @@ class Secche:
         @param rawJSONData - The return JSON from the API
         @return None
         """
-
         # Declare option data array
         optionData: Final[list] = None
 
@@ -207,7 +227,8 @@ class Secche:
         if len(optionData) == 0:
             # No entries, return
             return
-
+        #12:56 AM getting stuck here i want to kill myself holy shit
+        
         # Iterate
         for data in optionData:
             # Get the form type
@@ -228,19 +249,28 @@ class Secche:
                 # Next iteration
                 continue
 
+            if book not in self._outputData.keys():
+                self._outputData[book] = {}
+    
             # Create a new entry if specified year is not yet a key
-            if endYear not in self._outputData.keys():
-                self._outputData[endYear] = {}
+            if endYear not in self._outputData[book].keys():
+                self._outputData[book][endYear] = {}
 
-            # Populate
-            self._outputData[endYear][self._financialMetricOptions[metricOption]] = data["val"]
+            # Populate the grid
+            self._outputData[book][endYear][self._financialMetricOptions[book][metricOption]] = data["val"]
 
-    def _createAndStoreFromData(self, ticker: str) -> None:
+    def _createAndStoreFromData(self, ticker: str, book, final) -> None:
         # Create a new data frame
+        dataFrame = (book.replace(" ", "") + "_dataframe")
+        #print(dataFrame)
+        #print(dataFrame)
+        #print(book, "\n", self._outputData[book], "\n")
+
         dataFrame: Final[DataFrame] = DataFrame().from_dict(
             orient="index",
-            data=self._outputData,
+            data=self._outputData[book],
         )
+        #print(self._outputData.keys())
 
         # Flip the row and columns
         dataFrame = dataFrame.transpose()
@@ -248,35 +278,55 @@ class Secche:
         # Re-index the data frame
         dataFrame = dataFrame.reindex(columns=sorted(dataFrame.columns, reverse=True))
 
+        output = (self._OUTPUT_FILENAME, book)
         # Create a new spreadsheet writer
         spreadSheetWriter = ExcelWriter(
             engine="xlsxwriter",
-            path=self._OUTPUT_FILENAME.format(ticker=ticker),
+            path=self._OUTPUT_FILENAME.format(ticker=ticker.upper()),
         )
+
+        if book == "Balance Sheet":
+            self._dataFrame1 = dataFrame
+            print("doing the first")
+
+        elif book == "Income Statement":
+            self._dataFrame2 = dataFrame
+            print("Doing the else")
+
 
         # Convert the data frame to an excel sheet
-        dataFrame.to_excel(
-            index=True,
-            sheet_name="generated-report",
-            excel_writer=spreadSheetWriter,
-        )
 
-        # Set the zoom level
-        spreadSheetWriter.sheets["generated-report"].set_zoom(100)
+        if final == True:
+            self._dataFrame1.to_excel(
+                index=True,
+                sheet_name="Data",
+                excel_writer=spreadSheetWriter,
+                startrow=self._dataFrame1.shape[0] + 5
+            )
+            self._dataFrame2.to_excel(
+                index=True,
+                sheet_name="Data",
+                excel_writer=spreadSheetWriter,
+            )
 
-        # Add number format
-        numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
-        bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
-        # Format cells
-        spreadSheetWriter.sheets["generated-report"].set_column(f"B:{chr(len(self._outputData) + 65)}", 12, numberFormat)
+            # Set the zoom level
+            spreadSheetWriter.sheets["Data"].set_zoom(100)
 
-        # Format
-        spreadSheetWriter.sheets["generated-report"].autofit()
+            # Add number format
+            numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
+            bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
+            # Format cells
+            spreadSheetWriter.sheets["Data"].set_column(f"B:{chr(self._dataFrame2.shape[1] + 65)}", 12, numberFormat)
 
-        spreadSheetWriter.sheets["generated-report"].write(0, 0, 'Data provided by SECche: ' + ticker.upper(), bold)
+            # Format
+            spreadSheetWriter.sheets["Data"].autofit()
 
+            spreadSheetWriter.sheets["Data"].write(0, 0, "Income Statement" + ' Data provided by SECche: ' + ticker.upper(), bold)
+            spreadSheetWriter.sheets["Data"].write(self._dataFrame1.shape[0] + 5, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
+            print("Closed")
+            spreadSheetWriter.close()
         # Close the spreadsheet
-        spreadSheetWriter.close()
+    
 
 
 # Run
