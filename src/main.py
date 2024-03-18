@@ -142,7 +142,7 @@ class Secche:
             self._API_QUERY_URL.format(centralIndexKey=centralIndexKey),
             headers=self._API_QUERY_HEADERS,
         )
-
+        print("The URL used:", self._API_QUERY_URL.format(centralIndexKey=centralIndexKey))
         # Get the response JSON
         responseJSON: Final[dict] = loads(apiResponse.text)
 
@@ -212,15 +212,21 @@ class Secche:
         for data in optionData:
             # Get the form type
             formType: Final[str] = data["form"]
-
-            # Skip forms that aren't 10-K
-            if formType != "10-K":
-                # Next iteration
-                continue
+            try:
+                startDate: Final[str] = data["start"]
+                startMonth: Final[int] = startDate[5:7]
+            except:
+                startMonth: Final[int] = 9
 
             # Retrieve the end date and year
             endDate: Final[str] = data["end"]
             endYear: Final[int] = endDate[0:4]
+            endMonth: Final[int] = endDate[5:7]
+
+            # Skip forms that aren't 10-K
+            if (formType != "10-K") or ((int(endMonth) - int(startMonth)) > 1):
+                # Next iteration
+                continue
 
             # Create a new entry if specified year is not yet a key
             if endYear not in self._outputData.keys():
@@ -260,12 +266,14 @@ class Secche:
 
         # Add number format
         numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
-
+        bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
         # Format cells
         spreadSheetWriter.sheets["generated-report"].set_column(f"B:{chr(len(self._outputData) + 65)}", 12, numberFormat)
 
         # Format
         spreadSheetWriter.sheets["generated-report"].autofit()
+
+        spreadSheetWriter.sheets["generated-report"].write(0, 0, 'Data provided by SECche: ' + ticker.upper(), bold)
 
         # Close the spreadsheet
         spreadSheetWriter.close()
@@ -274,4 +282,4 @@ class Secche:
 # Run
 if __name__ == "__main__":
     # Test case
-    Secche().query("aapl")
+    Secche().query(input("Enter ticker: "))
