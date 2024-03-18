@@ -159,7 +159,6 @@ class Secche:
         responseJSON: Final[dict] = loads(apiResponse.text)
 
         # Parse and store data
-        #WORKING
         #For Balance Sheet and Income Statement
         amountBooks = len(self._financialMetricOptions)
         timesRan = 0
@@ -227,8 +226,7 @@ class Secche:
         if len(optionData) == 0:
             # No entries, return
             return
-        #12:56 AM getting stuck here i want to kill myself holy shit
-        
+                
         # Iterate
         for data in optionData:
             # Get the form type
@@ -262,15 +260,11 @@ class Secche:
     def _createAndStoreFromData(self, ticker: str, book, final) -> None:
         # Create a new data frame
         dataFrame = (book.replace(" ", "") + "_dataframe")
-        #print(dataFrame)
-        #print(dataFrame)
-        #print(book, "\n", self._outputData[book], "\n")
 
         dataFrame: Final[DataFrame] = DataFrame().from_dict(
             orient="index",
             data=self._outputData[book],
         )
-        #print(self._outputData.keys())
 
         # Flip the row and columns
         dataFrame = dataFrame.transpose()
@@ -287,11 +281,10 @@ class Secche:
 
         if book == "Balance Sheet":
             self._dataFrame1 = dataFrame
-            print("doing the first")
 
         elif book == "Income Statement":
             self._dataFrame2 = dataFrame
-            print("Doing the else")
+        #Save balance sheet and income statement as two seperate dataframes
 
 
         # Convert the data frame to an excel sheet
@@ -323,11 +316,8 @@ class Secche:
 
             spreadSheetWriter.sheets["Data"].write(0, 0, "Income Statement" + ' Data provided by SECche: ' + ticker.upper(), bold)
             spreadSheetWriter.sheets["Data"].write(self._dataFrame1.shape[0] + 5, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
-            print("Closed")
             spreadSheetWriter.close()
         # Close the spreadsheet
-    
-
 
 # Run
 if __name__ == "__main__":
