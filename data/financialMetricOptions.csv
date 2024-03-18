@@ -1,28 +1,28 @@
-SEC Code,Identifier
-RevenueFromContractWithCustomerExcludingAssessedTax,Revenue
-Revenues,Revenue
-SalesRevenueNet,Revenue
-CostOfGoodsAndServicesSold,COGS/COR
-CostOfRevenue,COGS/COR
-GrossProfit,Gross Profit
-OperatingExpenses,Operating Expenses
-AdvertisingExpense,Advertising Expenses
-MarketingExpense,Marketing Expenses
-CostOfGoodsAndServicesSoldDepreciation,COGS Depreciation
-DepreciationAndAmortization,Depreciation and Amortization
-DepreciationDepletionAndAmortization,Depreciation and Amortization
-InterestExpense,Interest Expense
-NetIncomeLoss,Net Income
-OperatingIncomeLoss,Opering Income
-NonoperatingIncomeExpense,Nonoperating Income
-EarningsPerShareBasic,EPS
-Assets,Assets
-AccruedLiabilitiesCurrent,Current Liabilities
-LiabilitiesCurrent,Liabilities
-AccountsPayableCurrent,Accounts Payable
-AccountsPayableTradeCurrent,Accounts Payable
-AccountsReceivableNetCurrent,Accounts Receivable
-Liabilities,Liabilities
-StockholdersEquity,Common Stock Equity
-LiabilitiesAndStockholdersEquity,Liabilities + Common Stock Equity
-Cash,Cash
+SEC name, Sheet name
+RevenueFromContractWithCustomerExcludingAssessedTax,Revenue,Income Statement
+SalesRevenueNet,Revenue,Income Statement
+Revenues,Revenue,Income Statement
+CostOfGoodsAndServicesSold,COGS/COR,Income Statement
+CostOfRevenue,COGS/COR,Income Statement
+GrossProfit,Gross Profit,Income Statement
+OperatingExpenses,Operating Expenses,Income Statement
+OperatingIncomeLoss,Operating Loss,Income Statement
+AdvertisingExpense,Advertising Expenses,Income Statement
+MarketingExpense,Marketing Expenses,Income Statement
+CostOfGoodsAndServicesSoldDepreciation,COGS Depreciation,Income Statement
+DepreciationAndAmortization,Depreciation and Amortization,Income Statement
+DepreciationDepletionAndAmortization,Depreciation and Amortization,Income Statement
+InterestExpense,Interest Expense,Income Statement
+NetIncomeLoss,Net Income,Income Statement
+NonoperatingIncomeExpense,Nonoperating Income,Income Statement
+Assets,Assets,Balance Sheet
+AccruedLiabilitiesCurrent,Current Liabilities,Balance Sheet
+LiabilitiesCurrent,Current Liabilities,Balance Sheet
+Liabilities,Liabilities,Balance Sheet
+StockholdersEquity,Common Stock Equity,Balance Sheet
+LiabilitiesAndStockholdersEquity,Liabilities + Common Stock Equity,Balance Sheet
+AccountsPayableCurrent,Accounts Payable,Balance Sheet
+AccountsPayableTradeCurrent,Accounts Payable,Balance Sheet
+AccountsReceivableNetCurrent,Accounts Receivable,Balance Sheet
+Cash,Cash,Balance Sheet
+CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents,Cash and Cash Equivalents,Balance Sheet
