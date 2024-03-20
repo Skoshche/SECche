@@ -1,20 +1,4 @@
-SEC name, Sheet name
-RevenueFromContractWithCustomerExcludingAssessedTax,Revenue,Income Statement
-SalesRevenueNet,Revenue,Income Statement
-Revenues,Revenue,Income Statement
-CostOfGoodsAndServicesSold,COGS/COR,Income Statement
-CostOfRevenue,COGS/COR,Income Statement
-GrossProfit,Gross Profit,Income Statement
-OperatingExpenses,Operating Expenses,Income Statement
-OperatingIncomeLoss,Operating Loss,Income Statement
-AdvertisingExpense,Advertising Expenses,Income Statement
-MarketingExpense,Marketing Expenses,Income Statement
-CostOfGoodsAndServicesSoldDepreciation,COGS Depreciation,Income Statement
-DepreciationAndAmortization,Depreciation and Amortization,Income Statement
-DepreciationDepletionAndAmortization,Depreciation and Amortization,Income Statement
-InterestExpense,Interest Expense,Income Statement
-NetIncomeLoss,Net Income,Income Statement
-NonoperatingIncomeExpense,Nonoperating Income,Income Statement
+SEC name," Sheet name",
 Assets,Assets,Balance Sheet
 AccruedLiabilitiesCurrent,Current Liabilities,Balance Sheet
 LiabilitiesCurrent,Current Liabilities,Balance Sheet
@@ -26,3 +10,29 @@ AccountsPayableTradeCurrent,Accounts Payable,Balance Sheet
 AccountsReceivableNetCurrent,Accounts Receivable,Balance Sheet
 Cash,Cash,Balance Sheet
 CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents,Cash and Cash Equivalents,Balance Sheet
+RevenueFromContractWithCustomerExcludingAssessedTax,Revenue,Income Statement
+SalesRevenueNet,Revenue,Income Statement
+Revenues,Revenue,Income Statement
+CostOfGoodsAndServicesSold,Cost of Goods and Services Sold,Income Statement
+CostOfRevenue,Cost of Revenue,Income Statement
+GrossProfit,Gross Profit,Income Statement
+OperatingExpenses,Operating Expenses,Income Statement
+OperatingIncomeLoss,Operating Income,Income Statement
+SellingGeneralAndAdministrativeExpense,Selling General and Administrative,Income Statement
+ResearchAndDevelopmentExpense,Research and Development,Income Statement
+InvestmentIncomeNet,Investing Income,Income Statement
+InterestIncomeExpenseNet,Net Interest Income,Income Statement
+InterestExpense,Interest Expense,Income Statement
+NoninterestIncome,Non-Interest Income,Income Statement
+AdvertisingExpense,Advertising Expenses,Income Statement
+OtherNonoperatingIncomeExpense,Other Nonoperating Income Expense,Income Statement
+Depreciation,Depreciation,Income Statement
+DepreciationDepletionAndAmortization,Depreciation and Amortization,Income Statement
+MarketingExpense,Marketing Expenses,Income Statement
+CostOfGoodsAndServicesSoldDepreciation,COGS Depreciation,Income Statement
+DepreciationAndAmortization,Depreciation and Amortization,Income Statement
+IncomeTaxExpenseBenefit,Income Tax Expense,Income Statement
+InterestAndDebtExpense,Interest and Debt Expense,Income Statement
+IncomeLossFromContinuingOperations,Income from Continuing Operations,Income Statement
+ComprehensiveIncomeNetOfTax,Income Net of Tax,Income Statement
+NetIncomeLoss,Net Income,Income Statement
