@@ -4,6 +4,7 @@ from os import getcwd
 from csv import reader
 from json import loads
 from typing import Final
+import re
 
 # Second party
 
@@ -33,14 +34,14 @@ class CIKNotFoundException(Exception):
     _exceptionMessage: Final[str] = None
 
     # Constructor
-    def __init__(self, message: str, *args: object) -> None:
+    def __init__(self, message: str):
         """
         Constructs a new ``CIKNotFoundException`` instance.
 
         @return ``CIKNotFoundException`` - ``CIKNotFoundException`` instance
         """
         # Instance the base Exception
-        super().__init__(*args)
+        super().__init__(message)
 
         # Set the exception message
         self._exceptionMessage = message
@@ -54,7 +55,8 @@ class CIKNotFoundException(Exception):
 
         @return ``str`` - The exception message
         """
-        return self._exceptionMessage
+        return "ERROR MESSAGE"
+        #return self._exceptionMessage
 
     # Private Static Methods
 
@@ -81,10 +83,12 @@ class Secche:
     _financialMetricOptions: Final[dict] = None
     _centralIndexKeyDataFrame: Final[DataFrame] = None
     
-    _IncomeStatement: Final[any] = None
-    _BalanceSheet: Final[any]  = None
-    _CashFlow: Final[any]  = None
-    _Ratios: Final[any]  = None
+    _IncomeStatement: Final[any] = 0
+    _BalanceSheet: Final[any]  = 0
+    _CashFlow: Final[any]  = 0
+    _Ratios: Final[any]  = 0
+
+    _Result = 0
 
     # Constructor
     def __init__(self) -> None:
@@ -136,7 +140,7 @@ class Secche:
     # Public Static Methods
 
     # Public Inherited Methods
-    def query(self, ticker: str) -> None:
+    def query(self, ticker: str, filetype: str):
         """
         Queries a given ticker for data and outputs it as a spreadsheet.
 
@@ -149,7 +153,8 @@ class Secche:
 
         # Check if the CIK is valid
         if centralIndexKey == None:
-            raise CIKNotFoundException(f"Central Index Key({ticker}) was not found!")
+            ticker = ticker.upper()
+            return CIKNotFoundException(f"Central Index Key for ticker {ticker} was not found!")
 
         # Send the request
         apiResponse: Final[Response] = get(
@@ -157,24 +162,36 @@ class Secche:
             headers=self._API_QUERY_HEADERS,
         )
         print("The URL used:", self._API_QUERY_URL.format(centralIndexKey=centralIndexKey))
+        
         # Get the response JSON
         responseJSON: Final[dict] = loads(apiResponse.text)
+
 
         # Parse and store data
         #For Balance Sheet and Income Statement
         amountBooks = len(self._financialMetricOptions)
+
         timesRan = 0
         for book in self._financialMetricOptions:
             #For each value in Balance Sheet or Income statement
             for metricOption in self._financialMetricOptions[book]:
                 self._parseAndStoreFinancialData(metricOption, responseJSON, book)
+                #CHECKPOINT
+
 
             # Create a new spreadsheet and dump the data
             timesRan += 1
             final = False
             if timesRan == amountBooks:
                 final = True
-            self._createAndStoreFromData(ticker, book, final)
+
+            if book not in self._outputData.keys():
+                self._outputData[book] = {}  # Add the key if it doesn't exist
+            self._createAndStoreFromData(ticker, book, final, filetype)
+        
+        if filetype == "dataframe":
+            return self._IncomeStatement, self._BalanceSheet, self._CashFlow, self._Ratios
+        
     # Private Static Methods
 
     # Private Inherited Methods
@@ -209,7 +226,7 @@ class Secche:
             return None
 
     #Parse financial data from SEC api
-    def _parseAndStoreFinancialData(self, metricOption: str, rawJSONData: dict, book) -> None:
+    def _parseAndStoreFinancialData(self, metricOption: str, rawJSONData: dict, book):
         """
         Parses the return JSON data and stores the specified financial metric option.
 
@@ -224,6 +241,7 @@ class Secche:
         try:
             # Set option data
             optionData = rawJSONData["facts"]["us-gaap"][metricOption]["units"]["USD"]
+        
         except Exception:
             # Option not found, return
             return
@@ -232,39 +250,44 @@ class Secche:
         if len(optionData) == 0:
             # No entries, return
             return
-                
+        
+        # print("KEYSSSSS", self._outputData.keys())
         # Iterate
+        # The 0,1,2,3,4 etc under a specific option data
         for data in optionData:
             # Get the form type
+
             formType: Final[str] = data["form"]
-            try:
-                startDate: Final[str] = data["start"]
-                startMonth: Final[int] = startDate[5:7]
-            except:
-                startMonth: Final[int] = 9
+
+
 
             # Retrieve the end date and year
             endDate: Final[str] = data["end"]
             endYear: Final[int] = endDate[0:4]
             endMonth: Final[int] = endDate[5:7]
+            try:
+                startDate: Final[str] = data["start"]
+                startMonth: Final[int] = startDate[5:7]
+            except:
+                startMonth: Final[int] = endMonth
 
-            # Skip forms that aren't 10-K
-            if (formType != "10-K") or ((int(endMonth) - int(startMonth)) > 1):
+            # Skip forms that aren't 10-K or 10-K/A
+            if (formType == "10-Q") or (abs((int(startMonth) - int(endMonth))) in range(2,11)):
                 # Next iteration
                 continue
 
             if book not in self._outputData.keys():
                 self._outputData[book] = {}
-    
+
             # Create a new entry if specified year is not yet a key
             if endYear not in self._outputData[book].keys():
                 self._outputData[book][endYear] = {}
 
             # Populate the grid
-            self._outputData[book][endYear][self._financialMetricOptions[book][metricOption]] = data["val"]
+            self._outputData[book][endYear][self._financialMetricOptions[book][metricOption]] = float(data["val"])
 
     #Format for excel
-    def _ExcelFormatting(self, ticker) -> None:
+    def _ExcelFormatting(self, ticker):
         row = 0
 
         spreadSheetWriter = ExcelWriter(
@@ -309,8 +332,9 @@ class Secche:
         # Close the spreadsheet
 
     #Store the data in dataframes
-    def _createAndStoreFromData(self, ticker: str, book, final) -> None:
+    def _createAndStoreFromData(self, ticker: str, book, final, filetype):
         # Create a new data frame
+        
         dataFrame = (book.replace(" ", "") + "_dataframe")
 
         dataFrame: Final[DataFrame] = DataFrame().from_dict(
@@ -321,7 +345,7 @@ class Secche:
         # Flip the row and columns
         dataFrame = dataFrame.transpose()
 
-        # Re-index the data frame
+        # Re-index the data
         dataFrame = dataFrame.reindex(columns=sorted(dataFrame.columns, reverse=True))
 
         output = (self._OUTPUT_FILENAME, book)
@@ -340,16 +364,18 @@ class Secche:
         
         elif book == "Ratios":
             self._Ratios = dataFrame
-        
-
 
         startRow = 0
         # Convert the data frame to an excel sheet once all variables are set
         if final == True:
-
-            self._ExcelFormatting(ticker)
+            match(filetype.lower()):
+                case "excel":
+                    self._ExcelFormatting(ticker)
+                case _:
+                    self._Result = "invalid format"
 
 # Run
 if __name__ == "__main__":
+
     # Test case
-    Secche().query(input("Enter ticker: "))
+    Secche().query(input("Enter ticker: "),"excel")
