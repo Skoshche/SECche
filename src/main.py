@@ -76,7 +76,7 @@ class Secche:
     _API_QUERY_HEADERS: Final[dict] = {"User-Agent": "SECche"}
     _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/centralIndexKey.csv")
     _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/financialMetricOptions.csv")
-
+    _EVERY_FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/everyGAAPMetricOption.csv")
     # Public Variables
 
     # Private Variables
@@ -364,7 +364,7 @@ class Secche:
             # Format
         spreadSheetWriter.sheets["Data"].autofit()
 
-        spreadSheetWriter.sheets["Data"].write(0, 0, "Income Statement" + ' Data provided by SECche: ' + ticker.upper(), bold)
+        spreadSheetWriter.sheets["Data"].write(0, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
         spreadSheetWriter.close()
         # Close the spreadsheet
 

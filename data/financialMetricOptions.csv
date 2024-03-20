@@ -1,38 +1,57 @@
-SEC name," Sheet name",
-Assets,Assets,Balance Sheet
+Tag,Label,Book
+Cash,Cash,Balance Sheet
+CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents,Cash and Cash Equivalents,Balance Sheet
+AccountsReceivableNetCurrent,Accounts Receivable,Balance Sheet
+AccountsPayableCurrent,Accounts Payable,Balance Sheet
+AccountsPayableTradeCurrent,Accounts Payable,Balance Sheet
 AccruedLiabilitiesCurrent,Current Liabilities,Balance Sheet
 LiabilitiesCurrent,Current Liabilities,Balance Sheet
 Liabilities,Liabilities,Balance Sheet
 StockholdersEquity,Common Stock Equity,Balance Sheet
+Assets,Assets,Balance Sheet
 LiabilitiesAndStockholdersEquity,Liabilities + Common Stock Equity,Balance Sheet
-AccountsPayableCurrent,Accounts Payable,Balance Sheet
-AccountsPayableTradeCurrent,Accounts Payable,Balance Sheet
-AccountsReceivableNetCurrent,Accounts Receivable,Balance Sheet
-Cash,Cash,Balance Sheet
-CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents,Cash and Cash Equivalents,Balance Sheet
 RevenueFromContractWithCustomerExcludingAssessedTax,Revenue,Income Statement
 SalesRevenueNet,Revenue,Income Statement
 Revenues,Revenue,Income Statement
 CostOfGoodsAndServicesSold,Cost of Goods and Services Sold,Income Statement
 CostOfRevenue,Cost of Revenue,Income Statement
-GrossProfit,Gross Profit,Income Statement
-OperatingExpenses,Operating Expenses,Income Statement
-OperatingIncomeLoss,Operating Income,Income Statement
-SellingGeneralAndAdministrativeExpense,Selling General and Administrative,Income Statement
-ResearchAndDevelopmentExpense,Research and Development,Income Statement
-InvestmentIncomeNet,Investing Income,Income Statement
-InterestIncomeExpenseNet,Net Interest Income,Income Statement
-InterestExpense,Interest Expense,Income Statement
-NoninterestIncome,Non-Interest Income,Income Statement
-AdvertisingExpense,Advertising Expenses,Income Statement
-OtherNonoperatingIncomeExpense,Other Nonoperating Income Expense,Income Statement
-Depreciation,Depreciation,Income Statement
-DepreciationDepletionAndAmortization,Depreciation and Amortization,Income Statement
-MarketingExpense,Marketing Expenses,Income Statement
 CostOfGoodsAndServicesSoldDepreciation,COGS Depreciation,Income Statement
 DepreciationAndAmortization,Depreciation and Amortization,Income Statement
-IncomeTaxExpenseBenefit,Income Tax Expense,Income Statement
+DepreciationDepletionAndAmortization,Depreciation and Amortization,Income Statement
+Depreciation,Depreciation,Income Statement
+GrossProfit,Gross Profit,Income Statement
+SellingGeneralAndAdministrativeExpense,Selling General and Administrative,Income Statement
+ResearchAndDevelopmentExpense,Research and Development,Income Statement
+AdvertisingExpense,Advertising Expenses,Income Statement
+MarketingExpense,Marketing Expenses,Income Statement
+OperatingExpenses,Operating Expenses,Income Statement
+OperatingIncomeLoss,Operating Income,Income Statement
+NoninterestIncome,Non-Interest Income,Income Statement
+OtherNonoperatingIncomeExpense,Other Nonoperating Income Expense,Income Statement
+InterestIncomeExpenseNet,Net Interest Income,Income Statement
+InterestExpense,Interest Expense,Income Statement
 InterestAndDebtExpense,Interest and Debt Expense,Income Statement
+IncomeTaxExpenseBenefit,Income Tax Expense,Income Statement
 IncomeLossFromContinuingOperations,Income from Continuing Operations,Income Statement
 ComprehensiveIncomeNetOfTax,Income Net of Tax,Income Statement
+InvestmentIncomeNet,Investing Income,Income Statement
 NetIncomeLoss,Net Income,Income Statement
+NetIncomeLoss,Net Income / Loss,Cash Flow
+DepreciationDepletionAndAmortization,Depreciation,Cash Flow
+IncreaseDecreaseInInventories,Change in Inventory,Cash Flow
+IncreaseDecreaseInReceivables,Change in Receivables,Cash Flow
+IncreaseDecreaseInOperatingAssets,Change in Operating Assets,Cash Flow
+IncreaseDecreaseInOperatingLiabilities,Change in Operating Liabilities,Cash Flow
+NetCashProvidedByUsedInOperatingActivities,Cash Flow from Operating Activities,Cash Flow
+PaymentsToAcquireOtherInvestments,Payments to Acquire Other Investments,Cash Flow
+NetCashProvidedByUsedInInvestingActivities,Cash Flow from Investing Activities,Cash Flow
+PaymentsToAcquireProductiveAssets,Payments to Acquire Productive Assets,Cash Flow
+NetCashProvidedByUsedInFinancingActivities,Cash Flow from Financing Activities,Cash Flow
+PaymentsForRepurchaseOfEquity,Payments for Repurchase of Equity,Cash Flow
+PaymentsForRepurchaseOfCommonStock,Payments for Repurchase of Common Stock,Cash Flow
+PaymentsForRepurchaseOfPreferredStockAndPreferenceStock,Payments for Repurchase of Preferred Stock,Cash Flow
+ProceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet,Proceeds from Issuance of Long-term Debt and Capital Securities / Net,Cash Flow
+ProceedsFromIssuanceOfCommonStock,Proceeds from Issuance of Common Stock,Cash Flow
+ProceedsFromIssuanceOfPreferredStockPreferenceStockAndWarrants,Proceeds from Issuance of Preferred Stock / Preference Stock / and Warrants,Cash Flow
+PaymentsOfDividends,Payments of Dividends,Cash Flow
+NetCashProvidedByUsedInOperatingActivities,Net Cash Increase / Decrease,Cash Flow

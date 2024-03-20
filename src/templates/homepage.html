@@ -25,11 +25,23 @@
         <input id="tickerInput" name="text">
         <input type="submit">
     </form>
+
     <script>
     document.getElementById("redirectForm").onsubmit = function() {
         var tickerValue = document.getElementById("tickerInput").value;
         this.action = "/" + tickerValue;
     };
     </script>
+    <div>
+        <p>Welcome to SECche! A project developed by me, Skoshche!</p>
+        <p>I have been working on this project in order to provide a free and convenient way to view financial data.</p>
+    </div>
+
+    <!-- HTML !-->
+    <form action="https://github.com/Skoshche/SECche" target="_blank">
+        <button class="button-1" role="button">GitHub link</button>
+    </form>
+
+
 </body>
 </html>

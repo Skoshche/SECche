@@ -25,6 +25,7 @@ def display_dataframe(ticker):
     return render_template(
         'index.html',ticker=ticker.upper(), URL=URL,
         IncomeStatement=IncomeStatement.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x)),
-        BalanceSheet=BalanceSheet.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x))
+        BalanceSheet=BalanceSheet.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x)),
+        CashFlow=CashFlow.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x))
         )
 
