@@ -1,5 +1,4 @@
-
-SEC name, Sheet name,
+SEC name," Sheet name"," Book"
 Assets,Assets,Balance Sheet
 AccruedLiabilitiesCurrent,Current Liabilities,Balance Sheet
 LiabilitiesCurrent,Current Liabilities,Balance Sheet
@@ -14,8 +13,8 @@ CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents,Cash and Cash Equi
 RevenueFromContractWithCustomerExcludingAssessedTax,Revenue,Income Statement
 SalesRevenueNet,Revenue,Income Statement
 Revenues,Revenue,Income Statement
-CostOfGoodsAndServicesSold,Cost of Goods and Services Sold,Income Statement
-CostOfRevenue,Cost of Revenue,Income Statement
+CostOfGoodsAndServicesSold,Cost of Goods and Services Sold / Revenue,Income Statement
+CostOfRevenue,Cost of Goods and Services Sold / Revenue,Income Statement
 GrossProfit,Gross Profit,Income Statement
 OperatingExpenses,Operating Expenses,Income Statement
 OperatingIncomeLoss,Operating Income,Income Statement

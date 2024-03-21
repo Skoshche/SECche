@@ -272,8 +272,11 @@ class Secche:
             formType: Final[str] = data["form"]
             metricRename = self._financialMetricOptions[book][metricOption]
 
+            try:
+                value = int(data["val"])/1000
+            except:
+                value = "BROKE BITCH"
 
-            value = data["val"]
             # Retrieve the end date and year
             endDate: Final[str] = data["end"]
             endYear: Final[int] = endDate[0:4]
