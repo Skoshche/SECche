@@ -1,7 +1,9 @@
 # SECche
 Quickly and easily get the past financial reports from a company!
----
 
+Project available on the web: [SECche website](https://secche.skoshche.com)
+
+---
 ## About the Project
 I created SECche in order for there to be a free way to quickly and easily get the fundamental analytics of a company. All of the information is provided free of charge from the SEC's website using their own API, the only work that I have done myself is try to present it in a nice format.
 
@@ -21,5 +23,5 @@ apiInstance: Final[Secche] = Secche()
 apiInstance.query("aapl")
 ```
 ---
-<img width="1153" alt="Screenshot 2024-03-18 at 3 09 45 AM" src="https://github.com/Skoshche/SECche/assets/136208576/d4efe913-332d-4155-ab5f-8d30f245523c">
 
+<img width="1258" alt="Screenshot 2024-03-17 at 3 52 28 AM" src="https://github.com/Skoshche/SECche/assets/136208576/f685410c-127e-46fc-87f1-c1253f5396b3">

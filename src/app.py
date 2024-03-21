@@ -4,8 +4,11 @@ from markupsafe import escape
 import numpy as np
 import pandas as pd
 from main import Secche, CIKNotFoundException
+from logging import FileHandler,WARNING
 
 app = Flask(__name__)
+file_handler = FileHandler('errorlog.txt')
+file_handler.setLevel(WARNING)
 
 @app.route('/')
 def display_dataframebasic():
@@ -16,11 +19,11 @@ def display_dataframe(ticker):
     # Pass DataFrame to the HTML template
     returned = Secche().query(ticker, "dataframe") 
     try:
-        IncomeStatement, BalanceSheet, CashFlow, Ratios = returned
+        IncomeStatement, BalanceSheet, CashFlow, Ratios, URL = returned
     except:
         return render_template('error.html', errorMessage = str(returned))
     return render_template(
-        'index.html',ticker=ticker.upper(), 
+        'index.html',ticker=ticker.upper(), URL=URL,
         IncomeStatement=IncomeStatement.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x)),
         BalanceSheet=BalanceSheet.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x))
         )
