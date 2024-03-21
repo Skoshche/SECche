@@ -71,9 +71,15 @@ class Secche:
     _VERSION_NUMBER: Final[str] = "beta-v1.0.0"
     _OUTPUT_FILENAME: Final[str] = "{ticker}_financial_data.xlsx"
     _API_QUERY_HEADERS: Final[dict] = {"User-Agent": "SECche"}
+<<<<<<< Updated upstream
     _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/centralIndexKey.csv")
     _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/financialMetricOptions.csv")
 
+=======
+    _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/centralIndexKey.csv")
+    _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/financialMetricOptions.csv")
+    _EVERY_FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/everyGAAPMetricOption.csv")
+>>>>>>> Stashed changes
     # Public Variables
 
     # Private Variables
@@ -156,7 +162,15 @@ class Secche:
             self._API_QUERY_URL.format(centralIndexKey=centralIndexKey),
             headers=self._API_QUERY_HEADERS,
         )
+<<<<<<< Updated upstream
         print("The URL used:", self._API_QUERY_URL.format(centralIndexKey=centralIndexKey))
+=======
+
+        
+        self._URL = self._API_QUERY_URL.format(centralIndexKey=centralIndexKey)
+        print(f"The URL used: {self._URL}")
+        
+>>>>>>> Stashed changes
         # Get the response JSON
         responseJSON: Final[dict] = loads(apiResponse.text)
 
@@ -261,7 +275,27 @@ class Secche:
                 self._outputData[book][endYear] = {}
 
             # Populate the grid
+<<<<<<< Updated upstream
             self._outputData[book][endYear][self._financialMetricOptions[book][metricOption]] = data["val"]
+=======
+            
+            try:
+                oldDateString = self._outputDateTime[book][endYear][metricRename]  
+                if filingDate > oldDateString:
+                    #set DateTime to filing date, Data to value
+                    self._outputDateTime[book][endYear][metricRename] = filingDate
+                    self._outputData[book][endYear][metricRename] = float(value)
+
+                    #print values of both
+                else:
+                    continue
+            except Exception as error:
+                #set DateTime to filing date, Data to value
+                self._outputDateTime[book][endYear][metricRename] = filingDate
+                self._outputData[book][endYear][metricRename] = float(value)
+
+                #print values of both
+>>>>>>> Stashed changes
 
     #Format for excel
     def _ExcelFormatting(self, ticker) -> None:
