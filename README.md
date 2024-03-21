@@ -1,5 +1,6 @@
 # SECche
 Quickly and easily get the past financial reports from a company!
+
 Project available on the web: [SECche website](https://secche.skoshche.com)
 ---
 ## About the Project
