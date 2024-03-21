@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://use.typekit.net/bzu7ywr.css">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='style.css')}}"/> 
+    <title>SECche</title>
+    <style>
+        table.data {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: .2px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: rgba(205, 205, 205, 0.4);
+        }
+        th:first-child, td:first-child {
+            width: 170px; /* Adjust the width as needed */
+        }
+    </style>
+</head>
+<body>
+    <h1>SECche {{ticker}}</h1> 
+    <h3><a href="{{URL}}">Raw SEC data</a></h3>
+    <form id="redirectForm" method="POST" action="">
+        <input id="tickerInput" name="text">
+        <input type="submit" value="Search Ticker">
+    </form>
+    <script>
+    document.getElementById("redirectForm").onsubmit = function() {
+        var tickerValue = document.getElementById("tickerInput").value;
+        this.action = "/" + tickerValue;
+    };
+    </script>
+    <br>
+    <h2>Income Statement</h2>
+    {{ IncomeStatement | safe }}
+    <br> <br>
+    <h2>Balance Sheet</h2>
+    {{ BalanceSheet | safe }}
+</body>
+</html>
