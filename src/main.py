@@ -71,11 +71,13 @@ class Secche:
 
     # Constants
     _API_QUERY_URL: Final[str] = "https://data.sec.gov/api/xbrl/companyfacts/CIK{centralIndexKey}.json"
+    _EDGAR_URL_FORMAT: Final[str] = "https://www.sec.gov/edgar/browse/?CIK={centralIndexKey}"
     _VERSION_NUMBER: Final[str] = "beta-v1.0.0"
     _OUTPUT_FILENAME: Final[str] = "{ticker}_financial_data.xlsx"
     _API_QUERY_HEADERS: Final[dict] = {"User-Agent": "secche@skoshche.com","Accept-Encoding": "gzip,deflate", "Host": "data.sec.gov"}
     _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/centralIndexKey.csv")
     _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/financialMetricOptions.csv")
+    _COMPANYNAME: Final[str] = None
 
     # Public Variables
 
@@ -170,10 +172,13 @@ class Secche:
             return("Cannot connect to SEC API")
         
         self._URL = self._API_QUERY_URL.format(centralIndexKey=centralIndexKey)
+        self._EDGAR_URL = self._EDGAR_URL_FORMAT.format(centralIndexKey=centralIndexKey)
         print(f"The URL used: {self._URL}")
         
         # Get the response JSON
         responseJSON: Final[dict] = loads(apiResponse.text)
+
+        self._COMPANYNAME = responseJSON["entityName"]
 
         # Parse and store data
         #For Balance Sheet and Income Statement
@@ -198,7 +203,7 @@ class Secche:
             self._createAndStoreFromData(ticker, book, final, filetype)
         
         if filetype == "dataframe":
-            return self._IncomeStatement, self._BalanceSheet, self._CashFlow, self._Ratios, self._URL
+            return (self._IncomeStatement, self._BalanceSheet, self._CashFlow, self._Ratios, self._URL, self._COMPANYNAME, self._EDGAR_URL)
         
     # Private Static Methods
 
@@ -364,7 +369,7 @@ class Secche:
             # Format
         spreadSheetWriter.sheets["Data"].autofit()
 
-        spreadSheetWriter.sheets["Data"].write(0, 0, "Income Statement" + ' Data provided by SECche: ' + ticker.upper(), bold)
+        spreadSheetWriter.sheets["Data"].write(0, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
         spreadSheetWriter.close()
         # Close the spreadsheet
 

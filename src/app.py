@@ -19,11 +19,11 @@ def display_dataframe(ticker):
     # Pass DataFrame to the HTML template
     returned = Secche().query(ticker, "dataframe") 
     try:
-        IncomeStatement, BalanceSheet, CashFlow, Ratios, URL = returned
+        IncomeStatement, BalanceSheet, CashFlow, Ratios, URL, CompanyName, Edgar = returned
     except:
         return render_template('error.html', errorMessage = str(returned))
     return render_template(
-        'index.html',ticker=ticker.upper(), URL=URL,
+        'index.html',ticker=ticker.upper(), URL=URL, CompanyName=CompanyName, Edgar=Edgar,
         IncomeStatement=IncomeStatement.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x)),
         BalanceSheet=BalanceSheet.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x)),
         CashFlow=CashFlow.to_html(classes='data', header="true", float_format=lambda x: '{:,.0f}'.format(x)),
