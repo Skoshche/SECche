@@ -73,9 +73,9 @@ class Secche:
     _API_QUERY_URL: Final[str] = "https://data.sec.gov/api/xbrl/companyfacts/CIK{centralIndexKey}.json"
     _VERSION_NUMBER: Final[str] = "beta-v1.0.0"
     _OUTPUT_FILENAME: Final[str] = "{ticker}_financial_data.xlsx"
-    _API_QUERY_HEADERS: Final[dict] = {"User-Agent": "SECche"}
-    _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/centralIndexKey.csv")
-    _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/data/financialMetricOptions.csv")
+    _API_QUERY_HEADERS: Final[dict] = {"User-Agent": "secche@skoshche.com","Accept-Encoding": "gzip,deflate", "Host": "data.sec.gov"}
+    _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/centralIndexKey.csv")
+    _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/financialMetricOptions.csv")
 
     # Public Variables
 

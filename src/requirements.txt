@@ -11,3 +11,4 @@ six==1.16.0
 tzdata==2024.1
 urllib3==2.2.1
 XlsxWriter==3.2.0
+Flask==3.0.2
