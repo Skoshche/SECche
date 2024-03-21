@@ -32,8 +32,8 @@
     </style>
 </head>
 <body>
-    <h1>SECche {{ticker}}</h1> 
-    <h3><a href="{{URL}}">Raw SEC data</a></h3>
+    <h1>SECche</h1> <h2>{{ticker}} : {{CompanyName}}</h2> 
+    <h3><a href="{{URL}}" target="_blank">Raw SEC data</a> - <a href="{{Edgar}}" target="_blank">Edgar SEC data</a></h3>
     <form id="redirectForm" method="POST" action="">
         <input id="tickerInput" name="text">
         <input type="submit" value="Search Ticker">
@@ -50,6 +50,7 @@
     <br> <br>
     <h2>Balance Sheet</h2>
     {{ BalanceSheet | safe }}
+    <br> <br>
     <h2>Cash Flow</h2>
     {{ CashFlow | safe }}
 </body>
