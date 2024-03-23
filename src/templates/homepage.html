@@ -1,39 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://kit.fontawesome.com/31dc12e55e.js" crossorigin="anonymous"></script>
+    <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='style.css')}}"/> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SECche</title>
     <style>
-        table.data {
-            border-collapse: collapse;
-            width: 100%;
+        .fa-github {
+            color: black; /* Set the color to black */
         }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
+        .header {
+            margin: auto;
+            margin-top: 40px;
         }
-        th {
-            background-color: #f2f2f2;
+        .header  h1{
+            text-align: center;
+            font-family: 'ShinGo';
+        }
+        p, script, form {
+            text-align: center;
+        }
+        .logos, .description{
+            text-align:center;
+            padding-top:10px;
         }
     </style>
+
+
+
+
 </head>
 <body>
-    <h1>Welcome to SECche</h1> 
-    <form id="redirectForm" method="POST" action="">
-        <input id="tickerInput" name="text">
-        <input type="submit">
-    </form>
-    <script>
-    document.getElementById("redirectForm").onsubmit = function() {
-        var tickerValue = document.getElementById("tickerInput").value;
-        this.action = "/" + tickerValue;
-    };
-    </script>
-    <p>This project was made to allow free and easy access to SEC financial data</p>
-    <a href="https://github.com/Skoshche/SECche">
-        <button>GitHub</button>
-    </a>
+    <div class="header"> 
+        <h1>Welcome to SECche</h1> 
+    </div>
+
+    <div class="searchbox">
+        <form id="redirectForm" method="POST" action="">
+            <input id="tickerInput" name="text">
+            <input type="submit">
+        </form>
+        <script>
+            document.getElementById("redirectForm").onsubmit = function() {
+                var tickerValue = document.getElementById("tickerInput").value;
+                this.action = "/" + tickerValue;
+            };
+        </script>
+    </div>
+
+
+    <div class="description">
+        <p>Welcome to SECche! A project developed by me, Skoshche!</p>
+        <p>I have been working on this project in order to provide a free and convenient way to view financial data.</p>
+    </div>
+
+    <!-- HTML !-->
+    <div class="logos">
+        <a href="https://github.com/Skoshche/SECche" target="_blank">
+            <i class="fab fa-github" aria-hidden="true" style="font-size:24px;"></i>
+        </a>
+    </div>
+    
+    
+
+
 </body>
 </html>

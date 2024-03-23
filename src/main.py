@@ -64,6 +64,7 @@ class CIKNotFoundException(Exception):
     # Private Inherited Methods
 
 
+#Secche!!
 class Secche:
     # Enums
 
@@ -87,13 +88,17 @@ class Secche:
     _financialMetricOptions: Final[dict] = None
     _centralIndexKeyDataFrame: Final[DataFrame] = None
     
+    #Results for dataframe output
     _IncomeStatement: Final[any] = 0
     _BalanceSheet: Final[any]  = 0
     _CashFlow: Final[any]  = 0
     _Ratios: Final[any]  = 0
-
-    _Result = 0
     _URL = 0
+    _EDGAR_URL = 0
+    
+    #Printout
+    _Result = 0
+
     # Constructor
     def __init__(self) -> None:
         """
@@ -142,9 +147,7 @@ class Secche:
         # Debugging
         # print('Un-Padded CIK of "AAPL" ->', self._centralIndexKeyDataFrame.loc["AAPL".lower(), "CIK"])
 
-    # Public Static Methods
-
-    # Public Inherited Methods
+    #Go through structure
     def query(self, ticker: str, filetype: str):
         """
         Queries a given ticker for data and outputs it as a spreadsheet.
@@ -202,13 +205,10 @@ class Secche:
 
             self._createAndStoreFromData(ticker, book, final, filetype)
         
+        #What gets returned 
         if filetype == "dataframe":
             return (self._IncomeStatement, self._BalanceSheet, self._CashFlow, self._Ratios, self._URL, self._COMPANYNAME, self._EDGAR_URL)
-        
-    # Private Static Methods
-
-    # Private Inherited Methods
-            
+    
     #Pad out the CIK to be 10 digits
     def _padCIK(self, centralIndexKey: str) -> str:
         """
@@ -238,7 +238,7 @@ class Secche:
             # CIK was not found for the ticker, return None
             return None
 
-    #Parse financial data from SEC api
+    #Parse financial data from SEC api and store as dictionary to outputdata
     def _parseAndStoreFinancialData(self, metricOption: str, rawJSONData: dict, book):
         """
         Parses the return JSON data and stores the specified financial metric option.
@@ -331,52 +331,7 @@ class Secche:
 
                 #print values of both
 
-    #Format for excel
-    def _ExcelFormatting(self, ticker):
-        row = 0
-
-        spreadSheetWriter = ExcelWriter(
-            engine="xlsxwriter",
-            path=self._OUTPUT_FILENAME.format(ticker=ticker.upper()),
-        )
-
-        # Add number format
-        numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
-        bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
-
-        for i in (dict.keys(self._financialMetricOptions)):
-            variable_name = "_" + i.replace(" ", "")
-            variable = getattr(self, variable_name)
-            try:
-                variable.to_excel(
-                        index=True,
-                        sheet_name="Data",
-                        excel_writer=spreadSheetWriter,
-                        startrow=row
-                    )
-                
-                spreadSheetWriter.sheets["Data"].write(row, 0, (i + ' Data provided by SECche: ' + ticker.upper()), bold)
-
-                row += (variable.shape[0] +2)
-
-            except:
-                (i, " not added")
-
-        # Set the zoom level
-        spreadSheetWriter.sheets["Data"].set_zoom(100)
-
-            # Format cells
-        
-        spreadSheetWriter.sheets["Data"].set_column(f"B:{chr(self._IncomeStatement.shape[1] + 65)}", 12, numberFormat)
-
-            # Format
-        spreadSheetWriter.sheets["Data"].autofit()
-
-        spreadSheetWriter.sheets["Data"].write(0, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
-        spreadSheetWriter.close()
-        # Close the spreadsheet
-
-    #Store the data in dataframes
+    #Store the data in dataframes self._(name of book)
     def _createAndStoreFromData(self, ticker: str, book, final, filetype):
         # Create a new data frame
         custom_order = []
@@ -425,6 +380,54 @@ class Secche:
                     self._ExcelFormatting(ticker)
                 case _:
                     self._Result = "invalid format"
+
+    #Format for excel (Only if query is Excel output)
+    def _ExcelFormatting(self, ticker):
+        row = 0
+
+        spreadSheetWriter = ExcelWriter(
+            engine="xlsxwriter",
+            path=self._OUTPUT_FILENAME.format(ticker=ticker.upper()),
+        )
+
+        # Add number format
+        numberFormat: Final[any] = spreadSheetWriter.book.add_format({"num_format": '_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)'})
+        bold: Final[any] = spreadSheetWriter.book.add_format({'bold': True})
+
+        for i in (dict.keys(self._financialMetricOptions)):
+            variable_name = "_" + i.replace(" ", "")
+            variable = getattr(self, variable_name)
+            try:
+                variable.to_excel(
+                        index=True,
+                        sheet_name="Data",
+                        excel_writer=spreadSheetWriter,
+                        startrow=row
+                    )
+                
+                spreadSheetWriter.sheets["Data"].write(row, 0, (i + ' Data provided by SECche: ' + ticker.upper()), bold)
+
+                row += (variable.shape[0] +2)
+
+            except:
+                (i, " not added")
+
+        # Set the zoom level
+        spreadSheetWriter.sheets["Data"].set_zoom(100)
+
+            # Format cells
+        
+        spreadSheetWriter.sheets["Data"].set_column(f"B:{chr(self._IncomeStatement.shape[1] + 65)}", 12, numberFormat)
+
+            # Format
+        spreadSheetWriter.sheets["Data"].autofit()
+
+        spreadSheetWriter.sheets["Data"].write(0, 0, "Balance Sheet" + ' Data provided by SECche: ' + ticker.upper(), bold)
+        spreadSheetWriter.close()
+        # Close the spreadsheet
+
+
+
 
 # Run
 if __name__ == "__main__":

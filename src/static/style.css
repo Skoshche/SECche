@@ -1,24 +1,74 @@
 
 
 @font-face {
-  font-family: ShinGo;
+  font-family: 'ShinGo';
   src: url("fonts/ShinGo/AOTFShinGoProRegular.otf") format("opentype");
 }
 
-/* Classes */
-
+/* GeneralClasses */
 
 h1, h2, h3{
-    font-family: 'ShinGo', sans-serif;
+    font-family: 'ShinGo', Arial, sans-serif;
 }
 body{
+    font-size: 100%;
     font-family: 'Droid', sans-serif;
+    
 }
+
+
+#homeLink {
+  color: inherit; /* Use the color of the parent element */
+  text-decoration: none; /* Remove underline */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  margin: 0px;
+}
+
+/* Dataframe */
+.dataframe.content-table {
+  border-collapse: collapse !important;
+  border: none !important;
+  margin: 10px 0 50px;
+  font-size: .9em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+}
+.dataframe.content-table:last-child {
+  margin-bottom: 0px;
+}
+.dataframe.content-table thead tr {
+  background-color: #02808e;
+  color: #ffffff;
+  text-align: left !important;
+  font-weight: bold;
+}
+.dataframe.content-table th,
+.dataframe.content-table td {
+  padding: 12px !important;
+}
+.dataframe.content-table tbody tr{
+  border-bottom: 1px solid #dddddd !important;
+}
+.dataframe.content-table tbody tr:last-of-type{
+  border-bottom: 2px solid #02808e !important;
+}
+.dataframe.content-table tbody tr:nth-of-type(even){
+  background-color: #f3f3f3;
+}
+.dataframe.content-table tbody tr:nth-of-type(odd){
+  background-color: #ffffff;
+}
+
+
+
+
 
 
 /* CSS */
 .button-1 {
-  background-color: #EA4C89;
+  background-color: #4078c0;
   border-radius: 8px;
   border-style: none;
   box-sizing: border-box;
@@ -46,11 +96,7 @@ body{
 
 .button-1:hover,
 .button-1:focus {
-  background-color: #F082AC;
+  background-color: #7db1da;
 }
 
-.no-spacing h1,.no-spacing h2,.no-spacing h3 {
-  margin: 0; /* Remove any default margin */
-  padding: 0; /* Remove any default padding */
-}
 

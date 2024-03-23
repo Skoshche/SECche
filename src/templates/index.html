@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-   .dataframe.content-table {
-        border-collapse: collapse !important;
-        border: none !important;
-        margin: 25px 0;
-        font-size: .9em;
-        min-width: 400px;
-        border-radius: 5px 5px 0 0;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0,0,0,0.15);
-    }
-    .dataframe.content-table thead tr {
-        background-color: #02808e;
-        color: #ffffff;
-        text-align: left !important;
-        font-weight: bold;
-    }
-    .dataframe.content-table th,
-    .dataframe.content-table td {
-        padding: 12px !important;
-    }
-    .dataframe.content-table tbody tr{
-        border-bottom: 1px solid #dddddd !important;
-    }
-    .dataframe.content-table tbody tr:last-of-type{
-        border-bottom: 2px solid #009879 !important;
-    }
-    .dataframe.content-table tbody tr:nth-of-type(even){
-        background-color: #f3f3f3;
-    }
+
+<script>
+
+function goToParentPage() {
+  var currentUrl = window.location.href; // Get the current URL
+  var parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')); // Remove the last part of the URL
+  window.location.href = parentUrl; // Navigate to the parent URL
+}
+
+document.getElementById("redirectForm").onsubmit = function() {
+    var tickerValue = document.getElementById("tickerInput").value;
+    this.action = "/" + tickerValue;
+};
+
+</script>
     
+<body style="background-color: #ffffff;">
+<style>
+   .tables {
+    padding:10px 0px;
+   }
+   .tables h2{
+    margin-bottom: 0px;
+   } 
+   .headingbutton a#homeLink h1,
+   .companyinfo h2,
+   .links h3{
+    margin: 0px;
+    padding: 0px;
+   }
+   .searchbox form{
+    margin: 20px 0px 0px;
+   }
+
 </style>
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,34 +46,41 @@
     <title>SECche</title>
 </head>
 <body>
-    <div class="no-spacing">
-        <h1>SECche</h1><h2>{{ticker}} : {{CompanyName}}</h2> 
-        <h3><a href="{{URL}}" target="_blank">Raw SEC data</a> - <a href="{{Edgar}}" target="_blank">Edgar SEC data</a></h3><br>
+
+    <div class="headingbutton">
+        <a href="#" id="homeLink" onclick="goToParentPage()"><h1>SECche</h1></a>
+    </div>
+
+    <div class="companyinfo">
+        <h2>{{ticker}} : {{CompanyName}}</h2> 
+    </div>
+
+    <div class="links">
+        <h3><a href="{{URL}}" target="_blank">Raw SEC data</a> - <a href="{{Edgar}}" target="_blank">Edgar SEC data</a></h3>
+    </div>
+
+    <div class="searchbox">
         <form id="redirectForm" method="POST" action="">
             <input id="tickerInput" name="text">
             <input type="submit" value="Search Ticker">
         </form>
-        <script>
-        document.getElementById("redirectForm").onsubmit = function() {
-            var tickerValue = document.getElementById("tickerInput").value;
-            this.action = "/" + tickerValue;
-        };
-        </script>
     </div>
-    <br>
-    <div class="no-spacing">
-        <h2>Income Statement</h2>
-        {{ IncomeStatement | safe }}
+
+
+    <div class="tables">
+        <div>
+            <h2>Income Statement</h2>
+            {{ IncomeStatement | safe }}
+        </div>
+        <div>
+            <h2>Balance Sheet</h2>
+            {{ BalanceSheet | safe }}
+        </div>
+        <div>
+            <h2>Cash Flow</h2>
+            {{ CashFlow | safe }}
+        </div>
     </div>
-    <br>
-    <div class="no-spacing">
-        <h2>Balance Sheet</h2>
-        {{ BalanceSheet | safe }}
-    </div>
-    <br>
-    <div class="no-spacing">
-        <h2>Cash Flow</h2>
-        {{ CashFlow | safe }}
-    </div>
+
 </body>
 </html>
