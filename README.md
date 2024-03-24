@@ -24,4 +24,5 @@ apiInstance.query("aapl")
 ```
 ---
 
-<img width="1258" alt="Screenshot 2024-03-17 at 3 52 28 AM" src="https://github.com/Skoshche/SECche/assets/136208576/f685410c-127e-46fc-87f1-c1253f5396b3">
+
+![SECche Web](https://github.com/Skoshche/SECche/assets/136208576/9436309b-59db-4be4-8f65-e2e1e0e67493)
