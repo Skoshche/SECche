@@ -61,6 +61,19 @@ body{
   background-color: #ffffff;
 }
 
+.searchbox input{
+  width: auto;
+  box-sizing: border-box;
+  border: None;
+  border-bottom: 2px solid black;
+  font-size: 16px;
+  background-color: white;
+  background-image: url('searchicon.svg');
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  padding: 12px 20px 10px 40px;
+  margin: 0px 0px 0px;
+}
 
 
 

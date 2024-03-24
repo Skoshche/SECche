@@ -3,6 +3,7 @@
 from os import getcwd
 from csv import reader
 from json import loads
+import requests
 from typing import Final
 from datetime import datetime, date
 import re
@@ -76,7 +77,7 @@ class Secche:
     _VERSION_NUMBER: Final[str] = "beta-v1.0.0"
     _OUTPUT_FILENAME: Final[str] = "{ticker}_financial_data.xlsx"
     _API_QUERY_HEADERS: Final[dict] = {"User-Agent": "secche@skoshche.com","Accept-Encoding": "gzip,deflate", "Host": "data.sec.gov"}
-    _CENTRAL_INDEX_KEY_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/centralIndexKey.csv")
+    _CIK_QUERY_HEADERS: Final[dict] = {"User-Agent": "secche@skoshche.com","Accept-Encoding": "gzip,deflate", "Host": "www.sec.gov"}
     _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/financialMetricOptions.csv")
     _COMPANYNAME: Final[str] = None
 
@@ -106,13 +107,7 @@ class Secche:
 
         @return ``Secche`` - ``Secche`` instance
         """
-
-        # Read the CSV and store the data
-        self._centralIndexKeyDataFrame = read_csv(
-            self._CENTRAL_INDEX_KEY_FULL_PATH,
-            index_col=0,
-        )
-
+        
         # Instance a new dictionary object
         self._outputData = {}
         self._outputDateTime = {}
@@ -208,20 +203,8 @@ class Secche:
         #What gets returned 
         if filetype == "dataframe":
             return (self._IncomeStatement, self._BalanceSheet, self._CashFlow, self._Ratios, self._URL, self._COMPANYNAME, self._EDGAR_URL)
-    
-    #Pad out the CIK to be 10 digits
-    def _padCIK(self, centralIndexKey: str) -> str:
-        """
-        Returns a padded CIK that matches the 10 digit standard.
 
-        @param centralIndexKey - The supplied CIK
-        @return paddedCentralIndexKey - A padded CIK
-        """
-
-        # Welcome to funky town
-        return ((10 - len(centralIndexKey)) * "0") + centralIndexKey
-
-    #Obtain the CIK value from centralIndexKey.csv (to be updated)
+    #Obtain the CIK value for a given ticker
     def _getCIK(self, ticker: str) -> str:
         """
         Retrieves a CIK from the given ticker.
@@ -230,13 +213,11 @@ class Secche:
         @return centralIndexKey - A padded CIK
         """
 
-        # Try to return the CIK from the given ticker
-        try:
-            # Retrieve the CIK from the data frame, pad it, and return it
-            return self._padCIK(str(self._centralIndexKeyDataFrame.loc[ticker.lower(), "CIK"]))
-        except Exception as ex:
-            # CIK was not found for the ticker, return None
-            return None
+        response: Final[Response] = requests.get("https://www.sec.gov/files/company_tickers.json", headers=self._CIK_QUERY_HEADERS)
+        tickers = response.json()
+        for i in tickers:
+            if ticker.upper() == (tickers[i]["ticker"]):
+                return ((10 - len(str(tickers[i]["cik_str"]))) * "0") + str(tickers[i]["cik_str"])
 
     #Parse financial data from SEC api and store as dictionary to outputdata
     def _parseAndStoreFinancialData(self, metricOption: str, rawJSONData: dict, book):
@@ -273,7 +254,10 @@ class Secche:
             metricRename = self._financialMetricOptions[book][metricOption]
 
             try:
-                value = int(data["val"])/1000
+                if (int(data["val"])%1000000) == 0:
+                    value = int(data["val"])/1000
+                else:
+                    value = int(data["val"])
             except:
                 value = "BROKE BITCH"
 

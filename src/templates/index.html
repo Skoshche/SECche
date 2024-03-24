@@ -9,11 +9,6 @@ function goToParentPage() {
   window.location.href = parentUrl; // Navigate to the parent URL
 }
 
-document.getElementById("redirectForm").onsubmit = function() {
-    var tickerValue = document.getElementById("tickerInput").value;
-    this.action = "/" + tickerValue;
-};
-
 </script>
     
 <body style="background-color: #ffffff;">
@@ -33,6 +28,14 @@ document.getElementById("redirectForm").onsubmit = function() {
    .searchbox form{
     margin: 20px 0px 0px;
    }
+   .left, .searchbox{
+    width: 49%;
+    display: inline-block;
+    vertical-align: middle;
+   }
+   .searchbox{
+    text-align: right;
+   }
 
 </style>
 <head>
@@ -51,20 +54,28 @@ document.getElementById("redirectForm").onsubmit = function() {
         <a href="#" id="homeLink" onclick="goToParentPage()"><h1>SECche</h1></a>
     </div>
 
-    <div class="companyinfo">
-        <h2>{{ticker}} : {{CompanyName}}</h2> 
+    <div class="headers">
+        <div class="left">
+            <div class="companyinfo">
+                <h2>{{ticker}} : {{CompanyName}}</h2> 
+            </div>
+            <div class="links">
+                <h3><a href="{{URL}}" target="_blank">Raw SEC data</a> - <a href="{{Edgar}}" target="_blank">Edgar SEC data</a></h3>
+            </div>    
+        </div>
+        <div class="searchbox">
+            <form id="redirectForm" method="POST" action="">
+                <input id="tickerInput" name="text">
+            </form>
+            <script>
+                document.getElementById("redirectForm").onsubmit = function() {
+                    var tickerValue = document.getElementById("tickerInput").value;
+                    this.action = "/" + tickerValue;
+                };
+            </script>
+        </div>
     </div>
 
-    <div class="links">
-        <h3><a href="{{URL}}" target="_blank">Raw SEC data</a> - <a href="{{Edgar}}" target="_blank">Edgar SEC data</a></h3>
-    </div>
-
-    <div class="searchbox">
-        <form id="redirectForm" method="POST" action="">
-            <input id="tickerInput" name="text">
-            <input type="submit" value="Search Ticker">
-        </form>
-    </div>
 
 
     <div class="tables">
