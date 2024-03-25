@@ -107,7 +107,10 @@ class Secche:
 
         @return ``Secche`` - ``Secche`` instance
         """
-        
+
+        # Read the CSV and store the data
+
+
         # Instance a new dictionary object
         self._outputData = {}
         self._outputDateTime = {}

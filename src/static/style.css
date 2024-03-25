@@ -60,6 +60,9 @@ body{
 .dataframe.content-table tbody tr:nth-of-type(odd){
   background-color: #ffffff;
 }
+.dataframe.content-table tr th:first-child {
+  max-width: 200px !important;
+}
 
 .searchbox input{
   width: auto;

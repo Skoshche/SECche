@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+
+    function goToParentPage() {
+        var currentUrl = window.location.href; // Get the current URL
+        var parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')); // Remove the last part of the URL
+        window.location.href = parentUrl; // Navigate to the parent URL
+    }
+        
+</script>
 <head>
     <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='style.css')}}"/> 
     <meta charset="UTF-8">
@@ -21,17 +30,20 @@
     </style>
 </head>
 <body>
-    <h1>SECche</h1> 
+    <div class="headingbutton">
+        <a href="#" id="homeLink" onclick="goToParentPage()"><h1>SECche</h1></a>
+    </div>
     <h2>{{ errorMessage }}<h2>
-    <form id="redirectForm" method="POST" action="">
-        <input id="tickerInput" name="text">
-        <input type="submit" value="Search Ticker">
-    </form>
-    <script>
-    document.getElementById("redirectForm").onsubmit = function() {
-        var tickerValue = document.getElementById("tickerInput").value;
-        this.action = "/" + tickerValue;
-    };
-    </script>
+    <div class="searchbox">
+        <form id="redirectForm" method="POST" action="">
+            <input id="tickerInput" name="text">
+        </form>
+        <script>
+        document.getElementById("redirectForm").onsubmit = function() {
+            var tickerValue = document.getElementById("tickerInput").value;
+            this.action = "/" + tickerValue;
+        };
+        </script>
+    </div>
 </body>
 </html>
