@@ -1,4 +1,5 @@
 SEC name," Sheet name"," Book"
+WeightedAverageNumberOfSharesOutstandingBasic,Basic Average Shares,Balance Sheet
 Assets,Assets,Balance Sheet
 AccruedLiabilitiesCurrent,Current Liabilities,Balance Sheet
 LiabilitiesCurrent,Current Liabilities,Balance Sheet
@@ -55,3 +56,4 @@ ProceedsFromIssuanceOfCommonStock,Proceeds from Issuance of Common Stock,Cash Fl
 ProceedsFromIssuanceOfPreferredStockPreferenceStockAndWarrants,Proceeds from Issuance of Preferred Stock / Preference Stock / and Warrants,Cash Flow
 PaymentsOfDividends,Payments of Dividends,Cash Flow
 NetCashProvidedByUsedInOperatingActivities,Net Cash Increase / Decrease,Cash Flow
+EPS,EPS,Ratios

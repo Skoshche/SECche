@@ -80,6 +80,7 @@ class Secche:
     _CIK_QUERY_HEADERS: Final[dict] = {"User-Agent": "secche@skoshche.com","Accept-Encoding": "gzip,deflate", "Host": "www.sec.gov"}
     _FINANCIAL_METRIC_OPTIONS_FULL_PATH: Final[str] = getcwd().replace("/src", "/src/data/financialMetricOptions.csv")
     _COMPANYNAME: Final[str] = None
+    _multiple = 0
 
     # Public Variables
 
@@ -168,7 +169,6 @@ class Secche:
                 self._API_QUERY_URL.format(centralIndexKey=centralIndexKey),
                 headers=self._API_QUERY_HEADERS,
             )
-            print(apiResponse)
         except:
             return("Cannot connect to SEC API")
         
@@ -234,89 +234,109 @@ class Secche:
         # Declare option data array
         optionData: Final[list] = None
 
-        # Try to fetch the specified option
-        try:
-            # Set option data
-            optionData = rawJSONData["facts"]["us-gaap"][metricOption]["units"]["USD"]
-        except Exception:
-            # Option not found, return
-            return
+        if book != "Ratios":
 
-        # Check if no entries are available
-        if len(optionData) == 0:
-            # No entries, return
-            return
-        
-        # print("KEYSSSSS", self._outputData.keys())
-        # Iterate
-        # The 0,1,2,3,4 etc under a specific option data
-        for data in optionData:
-            # Get the form type
-
-            formType: Final[str] = data["form"]
-            metricRename = self._financialMetricOptions[book][metricOption]
-
+            # Try to fetch the specified option
             try:
-                if (int(data["val"])%1000000) == 0:
-                    value = int(data["val"])/1000
-                else:
-                    value = int(data["val"])
-            except:
-                value = "BROKE BITCH"
+                # Set option data
 
-            # Retrieve the end date and year
-            endDate: Final[str] = data["end"]
-            endYear: Final[int] = endDate[0:4]
-            endMonth: Final[int] = endDate[5:7]
-            try:
-                startDate: Final[str] = data["start"]
-                startMonth: Final[int] = startDate[5:7]
-            except:
-                startMonth: Final[int] = endMonth
+                if "shares" in rawJSONData["facts"]["us-gaap"][metricOption]["units"].keys():
+                    print(rawJSONData["facts"]["us-gaap"][metricOption]["units"]["shares"])
+                    optionData = rawJSONData["facts"]["us-gaap"][metricOption]["units"]["shares"]
+                elif "USD" in rawJSONData["facts"]["us-gaap"][metricOption]["units"].keys():
+                    optionData = rawJSONData["facts"]["us-gaap"][metricOption]["units"]["USD"]
+            except Exception:
+                # Option not found, return
+                return
 
-            filingDate = datetime.strptime(data["filed"], "%Y-%m-%d")
-
-            # Skip forms that aren't 10-K or 10-K/A
-            if (formType == "10-Q") or (abs((int(startMonth) - int(endMonth))) in range(2,11)):
-                # Next iteration
-                continue
-
-            if book not in self._outputData.keys():
-                self._outputData[book] = {}
-                self._outputDateTime[book] = {}
-
-            # Create a new entry if specified year is not yet a key
-            if endYear not in self._outputData[book].keys():
-                self._outputData[book][endYear] = {}
-                self._outputDateTime[book][endYear] = {}
-
-            if metricRename not in self._outputData[book][endYear].keys():
-                self._outputData[book][endYear][metricRename] = {}
-                self._outputDateTime[book][endYear][metricRename] = {}
-
-            # Populate the grid
+            # Check if no entries are available
+            if len(optionData) == 0:
+                # No entries, return
+                return
             
-            try:
-                oldDateString = self._outputDateTime[book][endYear][metricRename]  
-                print("Filing date", type(filingDate))
-                print("Old date", type(oldDateString))
-                if filingDate > oldDateString:
+            # print("KEYSSSSS", self._outputData.keys())
+            # Iterate
+            # The 0,1,2,3,4 etc under a specific option data
+            for data in optionData:
+                # Get the form type
+
+                formType: Final[str] = data["form"]
+                metricRename = self._financialMetricOptions[book][metricOption]
+
+                try:
+                    value = int(data["val"])
+                except:
+                    value = "BROKE BITCH"
+
+                # Retrieve the end date and year
+                endDate: Final[str] = data["end"]
+                endYear: Final[int] = endDate[0:4]
+                endMonth: Final[int] = endDate[5:7]
+                try:
+                    startDate: Final[str] = data["start"]
+                    startMonth: Final[int] = startDate[5:7]
+                except:
+                    startMonth: Final[int] = endMonth
+
+                filingDate = datetime.strptime(data["filed"], "%Y-%m-%d")
+
+                # Skip forms that aren't 10-K or 10-K/A
+                if (formType == "10-Q") or (abs((int(startMonth) - int(endMonth))) in range(2,11)):
+                    # Next iteration
+                    continue
+
+                if book not in self._outputData.keys():
+                    self._outputData[book] = {}
+                    self._outputDateTime[book] = {}
+
+                # Create a new entry if specified year is not yet a key
+                if endYear not in self._outputData[book].keys():
+                    self._outputData[book][endYear] = {}
+                    self._outputDateTime[book][endYear] = {}
+
+                if metricRename not in self._outputData[book][endYear].keys():
+                    self._outputData[book][endYear][metricRename] = {}
+                    self._outputDateTime[book][endYear][metricRename] = {}
+
+                # Populate the grid
+                
+                try:
+                    oldDateString = self._outputDateTime[book][endYear][metricRename]  
+                    if filingDate > oldDateString:
+                        #set DateTime to filing date, Data to value
+                        self._outputDateTime[book][endYear][metricRename] = filingDate
+                        self._outputData[book][endYear][metricRename] = float(value)
+
+                        #print values of both
+                    else:
+                        continue
+                except Exception as error:
                     #set DateTime to filing date, Data to value
                     self._outputDateTime[book][endYear][metricRename] = filingDate
                     self._outputData[book][endYear][metricRename] = float(value)
-                    print("NEWER")
 
                     #print values of both
-                else:
-                    print("OLD DATE")
-                    continue
-            except Exception as error:
-                #set DateTime to filing date, Data to value
-                self._outputDateTime[book][endYear][metricRename] = filingDate
-                self._outputData[book][endYear][metricRename] = float(value)
-                print("FIRST DATE ", error)
+        else:
+            if book not in self._outputData.keys():
+                    self._outputData[book] = {}
+                    self._outputDateTime[book] = {}
+            
+            metricRename = self._financialMetricOptions[book][metricOption]
+            for year in self._outputData["Income Statement"].keys():
+                if year not in self._outputData[book].keys():
+                    self._outputData[book][year] = {}
+                    self._outputDateTime[book][year] = {}
+                try:
+                    EPS = ((int(self._outputData["Income Statement"][year]["Net Income"]) / int(self._outputData["Balance Sheet"][year]["Basic Average Shares"])))
+                    self._outputData[book][year][metricRename] = EPS
+                except:
+                    self._outputData[book][year][metricRename] = "N/A"
 
-                #print values of both
+
+                
+
+
+
 
     #Store the data in dataframes self._(name of book)
     def _createAndStoreFromData(self, ticker: str, book, final, filetype):
