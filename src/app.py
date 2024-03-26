@@ -20,13 +20,11 @@ def custom_format(x):
         return '{:,.0f}'.format(x)
 
 # Example DataFrame
-data = {'A': [-1000, 2000, -3000, 4000]}
-df = pd.DataFrame(data)
+df = pd.DataFrame()
 
 # Convert DataFrame to HTML with custom formatting
 html_table = df.to_html(float_format=custom_format, classes='content-table', header=True)
 
-print(html_table)
 
 
 @app.route('/')
