@@ -44,8 +44,8 @@ def display_dataframe(ticker):
         return render_template('error.html', errorMessage = str(returned))
     return render_template(
         'index.html',ticker=ticker.upper(), URL=URL, CompanyName=CompanyName, Edgar=Edgar, YahooFinance=YahooFinance,
-        IncomeStatement=IncomeStatement.to_html(classes='content-table', header="true", float_format=custom_format,border="0"),
-        BalanceSheet=BalanceSheet.to_html(classes='content-table', header="true", float_format=custom_format,border="0"),
-        CashFlow=CashFlow.to_html(classes='content-table', header="true", float_format=custom_format,border="0"),
+        IncomeStatement=IncomeStatement.to_html(classes='content-table', header="true", float_format=custom_format, border="0"),
+        BalanceSheet=BalanceSheet.to_html(classes='content-table', header="true", float_format=custom_format, border="0"),
+        CashFlow=CashFlow.to_html(classes='content-table', header="true", float_format=custom_format, border="0", ),
         )
 

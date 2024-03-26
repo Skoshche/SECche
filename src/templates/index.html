@@ -27,15 +27,33 @@ function goToParentPage() {
     display: inline-block;
    }
    .searchbox form{
-    margin: 20px 0px 0px;
+    max-width: 250px;
+    margin: 0px 0px 0px;
    }
    .left, .searchbox{
-    width: 49%;
     display: inline-block;
     vertical-align: middle;
    }
    .searchbox{
     text-align: right;
+   }
+   .headingbutton{
+    height:65;
+    position: relative;
+   }
+   .headingbutton .searchbox{
+    margin: 0;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display:inline-block;
+   }
+   .headers {
+    text-align: center;
+   }
+   #homeLink{
+    display: inline-block;
    }
 
 </style>
@@ -53,20 +71,9 @@ function goToParentPage() {
 
     <div class="headingbutton">
         <a href="#" id="homeLink" onclick="goToParentPage()"><h1>SECche</h1></a>
-    </div>
-
-    <div class="headers">
-        <div class="left">
-            <div class="companyinfo">
-                <h2>{{ticker}} : {{CompanyName}}</h2> 
-            </div>
-            <div class="links">
-                <h3><a href="{{URL}}" target="_blank">Raw SEC data</a> - <a href="{{Edgar}}" target="_blank">Edgar SEC data</a></h3> - <h3><a href="{{YahooFinance}}" target="_blank">Yahoo Finance</a>
-            </div>    
-        </div>
         <div class="searchbox">
             <form id="redirectForm" method="POST" action="">
-                <input id="tickerInput" name="text">
+                <input id="tickerInput" placeholder="Enter a ticker..." name="text">
             </form>
             <script>
                 document.getElementById("redirectForm").onsubmit = function() {
@@ -77,19 +84,28 @@ function goToParentPage() {
         </div>
     </div>
 
+    <div class="headers">
+        <div class="companyinfo">
+            <h2>{{ticker}} : {{CompanyName}}</h2> 
+        </div>
+        <div class="links">
+            <h3><a href="{{URL}}" target="_blank">Raw SEC data</a> - <a href="{{Edgar}}" target="_blank">Edgar SEC data</a></h3> - <h3><a href="{{YahooFinance}}" target="_blank">Yahoo Finance</a>
+        </div>    
+    </div>
+
 
 
     <div class="tables">
+        <h2>Income Statement</h2>
         <div>
-            <h2>Income Statement</h2>
             {{ IncomeStatement | safe }}
         </div>
+        <h2>Balance Sheet</h2>
         <div>
-            <h2>Balance Sheet</h2>
             {{ BalanceSheet | safe }}
         </div>
+        <h2>Cash Flow</h2>
         <div>
-            <h2>Cash Flow</h2>
             {{ CashFlow | safe }}
         </div>
     </div>

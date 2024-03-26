@@ -25,15 +25,22 @@ body{
 }
 
 /* Dataframe */
-.dataframe.content-table {
-  border-collapse: collapse !important;
+
+body{
+  overflow-x: hidden;
+}
+.tables div{
+  width: 100%;
+  overflow-x: scroll;
+}
+.tables table.dataframe.content-table {
+  background-color: red;
+  border-collapse: collapse;
   border: none !important;
-  margin: 10px 0 50px;
   font-size: .9em;
-  min-width: 400px;
-  border-radius: 5px 5px 0 0;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+}
+.dataframe.content-table thead, .dataframe.content-table tbody{
+  max-width: 100% !important;
 }
 .dataframe.content-table:last-child {
   margin-bottom: 0px;
@@ -76,6 +83,8 @@ body{
   background-repeat: no-repeat;
   padding: 12px 20px 10px 40px;
   margin: 0px 0px 0px;
+  top: 50%;
+  max-width: 250px;
 }
 
 
